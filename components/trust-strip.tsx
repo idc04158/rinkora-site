@@ -73,19 +73,32 @@ export function TrustStrip() {
 }
 
 function LogoRow() {
+  const logos = [
+    "/logo1.png",
+    "/logo2.png",
+    "/logo3.png",
+    "/logo4.jpg",
+    "/logo5.jpg",
+    "/logo6.png",
+    "/logo7.png",
+    "/logo8.png",
+    "/logo9.png",
+  ]
+
   return (
     <div className="flex items-center gap-20 pr-20">
-
-      <img src="/logo1.png" className="h-10 object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
-      <img src="/logo2.png" className="h-10 object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
-      <img src="/logo3.png" className="h-10 object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
-      <img src="/logo4.jpg" className="h-10 object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
-      <img src="/logo5.jpg" className="h-10 object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
-      <img src="/logo6.png" className="h-10 object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
-      <img src="/logo7.png" className="h-10 object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
-      <img src="/logo8.png" className="h-10 object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
-      <img src="/logo9.png" className="h-10 object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
-
+      {logos.map((src, index) => (
+        <div
+          key={index}
+          className="flex items-center justify-center w-[160px]"
+        >
+          <img
+            src={src}
+            alt="partner logo"
+            className="h-8 w-auto object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition duration-300"
+          />
+        </div>
+      ))}
     </div>
   )
 }
