@@ -32,12 +32,19 @@ export function Navbar() {
             <a href="#why" className="hover:text-primary transition">
               린코라의 차별점
             </a>
+
+            {/* ✅ 웨비나 추가 */}
+            <a
+              href="/webinars"
+              className="hover:text-primary transition"
+            >
+              웨비나
+            </a>
           </nav>
 
           {/* CTA 영역 */}
           <div className="hidden md:flex items-center gap-3">
 
-            {/* 서비스 기업 참여 */}
             <button
               onClick={() => setPartnerOpen(true)}
               className="rounded-lg border px-4 py-2 text-sm font-semibold hover:bg-gray-100 transition"
@@ -45,7 +52,6 @@ export function Navbar() {
               서비스 기업 참여
             </button>
 
-            {/* 브랜드 상담 */}
             <button
               onClick={() => setBrandOpen(true)}
               className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:opacity-90 transition"
@@ -58,15 +64,13 @@ export function Navbar() {
         </div>
       </header>
 
-      {/* 브랜드 상담 모달 */}
       {brandOpen && (
         <ConsultModal
-          service=""   // 기본값 비워둠 → 선택 필수
+          service=""
           onClose={() => setBrandOpen(false)}
         />
       )}
 
-      {/* 서비스 기업 참여 모달 */}
       {partnerOpen && (
         <ServicePartnerModal
           onClose={() => setPartnerOpen(false)}

@@ -11,13 +11,10 @@ export function Hero() {
 
   return (
     <>
-      {/* 상단/하단 여백 */}
       <section className="relative px-6 pt-14 pb-10 md:pt-18 md:pb-14">
+        <div className="relative mx-auto w-full max-w-6xl h-[420px] md:h-[460px] rounded-3xl overflow-hidden">
 
-        {/* 히어로 박스 */}
-        <div className="relative mx-auto w-full max-w-6xl h-[380px] md:h-[420px] rounded-3xl overflow-hidden">
-
-          {/* Video */}
+          {/* Background Video */}
           <video
             autoPlay
             muted
@@ -35,26 +32,23 @@ export function Hero() {
           <div className="relative z-10 flex h-full items-center justify-center px-6 text-center text-white">
             <div className="max-w-3xl">
 
-              {/* 🔵 수정된 헤드라인 */}
               <h1 className="text-3xl font-bold leading-tight sm:text-4xl md:text-5xl">
                 일본 수출, 방향을 먼저 정리하세요
               </h1>
 
-              {/* 🔵 수정된 서브카피 */}
-              <p className="mx-auto mt-4 max-w-xl text-sm text-white/85 md:text-base leading-relaxed">
-                시장 구조부터 실행 파트너까지,
+              <p className="mx-auto mt-5 max-w-2xl text-sm md:text-base text-white/85 leading-relaxed">
+                아마존, 라쿠텐, 각종 리포트까지 정보는 넘쳐납니다.
                 <br className="hidden sm:block" />
-                필요한 정보를 한 곳에서 확인할 수 있습니다.
+                지금 위치에서 무엇을 점검해야 할지 함께 정리해보세요.
               </p>
 
-              {/* 버튼 영역 */}
-              <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
 
                 <button
                   onClick={() => setOpenConsult(true)}
                   className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:opacity-90"
                 >
-                  브랜드 상담하기
+                  현재 단계 점검하기
                   <ArrowRight className="h-4 w-4" />
                 </button>
 
@@ -62,7 +56,7 @@ export function Hero() {
                   onClick={() => setOpenPartner(true)}
                   className="rounded-xl border border-white/30 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/20"
                 >
-                  서비스 기업 참여하기
+                  파트너 정보 보기
                 </button>
 
               </div>
@@ -72,7 +66,6 @@ export function Hero() {
         </div>
       </section>
 
-      {/* 모달 */}
       {openConsult && (
         <ConsultModal
           service=""
