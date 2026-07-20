@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react"
 import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 import { SearchX } from "lucide-react"
 import { useAuthSession } from "@/components/auth/auth-provider"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
@@ -25,12 +26,18 @@ import {
 
 export default function GrantsPage() {
   const { profile } = useAuthSession()
+  const searchParams = useSearchParams()
+  const initialQuery = searchParams.get("q") ?? ""
   const repository = useMemo(() => getOpportunityRepository(), [])
   const [opportunities, setOpportunities] = useState<OpportunityDto[]>([])
   const [savedIds, setSavedIds] = useState<string[]>([])
   const [categories, setCategories] = useState<OpportunityCategory[]>([])
   const [regions, setRegions] = useState<OpportunityRegion[]>([])
-  const [query, setQuery] = useState("")
+  const [query, setQuery] = useState(initialQuery)
+  useEffect(() => {
+    setQuery(initialQuery)
+  }, [initialQuery])
+
   const [selectedCategory, setSelectedCategory] = useState<OpportunityCategory | "ALL">(
     "ALL",
   )
@@ -115,15 +122,15 @@ export default function GrantsPage() {
         <section className="rounded-2xl border bg-card p-8">
           <p className="text-sm font-semibold tracking-wide text-primary">지원사업 검색</p>
           <h1 className="mt-3 text-3xl font-bold leading-snug md:text-4xl">
-            CountSelf Catalog 연동 대비
+            우리 기업에 맞는
             <br />
-            Mock 기반 검색 UI
+            지원사업을 찾아보세요
           </h1>
           <p className="mt-4 text-muted-foreground">
-            현재는 MockRepository로 화면을 구성했고, API 준비 시 Repository만 교체하면 됩니다.
+            키워드 검색과 필터를 활용해 필요한 지원사업을 빠르게 탐색할 수 있습니다.
           </p>
           <div className="mt-6">
-            <SearchBar onSearch={setQuery} />
+            <SearchBar initialValue={query} onSearch={setQuery} />
           </div>
           {profile.role !== "guest" ? (
             <div className="mt-4">
