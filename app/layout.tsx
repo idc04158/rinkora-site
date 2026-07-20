@@ -1,31 +1,17 @@
 import type { Metadata, Viewport } from 'next'
-import { Noto_Sans_KR, Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { AuthProvider } from "@/components/auth/auth-provider"
 import './globals.css'
 
-const _notoSansKR = Noto_Sans_KR({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-sans", display: "swap" });
-const _inter = Inter({ subsets: ["latin"], variable: "--font-heading", display: "swap" });
-
 export const metadata: Metadata = {
-  title: 'Rinkora | 한국 브랜드의 일본 수출을 연결합니다',
-  description: '링코라는 한국 브랜드와 검증된 일본 수출 지원 서비스 기업을 연결하는 플랫폼입니다.',
+  title: 'Rinkora | 기업 성장 기회 플랫폼',
+  description:
+    '린코라는 지원사업 검색부터 AI 추천, 전문가 매칭, 해외진출까지 이어지는 기업 성장 기회 플랫폼입니다.',
   generator: 'v0.app',
   icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
+    icon: '/icon-light-32x32.png',
+    shortcut: '/icon-light-32x32.png',
+    apple: '/icon-light-32x32.png',
   },
 }
 
@@ -41,9 +27,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" suppressHydrationWarning>
-      <body className={`${_notoSansKR.variable} ${_inter.variable} font-sans antialiased`}>
-        {children}
-        <Analytics />
+      <body className="font-sans antialiased">
+        <AuthProvider>
+          {children}
+          <Analytics />
+        </AuthProvider>
       </body>
     </html>
   )
