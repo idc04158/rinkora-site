@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react"
 import Link from "next/link"
-import { useSearchParams } from "next/navigation"
 import { SearchX } from "lucide-react"
 import { useAuthSession } from "@/components/auth/auth-provider"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
@@ -26,17 +25,19 @@ import {
 
 export default function GrantsPage() {
   const { profile } = useAuthSession()
-  const searchParams = useSearchParams()
-  const initialQuery = searchParams.get("q") ?? ""
   const repository = useMemo(() => getOpportunityRepository(), [])
   const [opportunities, setOpportunities] = useState<OpportunityDto[]>([])
   const [savedIds, setSavedIds] = useState<string[]>([])
   const [categories, setCategories] = useState<OpportunityCategory[]>([])
   const [regions, setRegions] = useState<OpportunityRegion[]>([])
-  const [query, setQuery] = useState(initialQuery)
+  const [query, setQuery] = useState("")
+
   useEffect(() => {
-    setQuery(initialQuery)
-  }, [initialQuery])
+    const keyword = new URLSearchParams(window.location.search).get("q") ?? ""
+    if (keyword) {
+      setQuery(keyword)
+    }
+  }, [])
 
   const [selectedCategory, setSelectedCategory] = useState<OpportunityCategory | "ALL">(
     "ALL",
