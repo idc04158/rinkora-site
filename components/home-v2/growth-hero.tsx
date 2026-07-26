@@ -22,15 +22,6 @@ export function GrowthHero() {
     <section className="relative px-6 pt-14 pb-10 md:pt-18 md:pb-14">
       <div className="relative mx-auto h-[400px] w-full max-w-6xl overflow-hidden rounded-3xl md:h-[440px]">
         <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-primary/80" />
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 h-full w-full object-cover opacity-30"
-        >
-          <source src="/hero-video.mp4" type="video/mp4" />
-        </video>
         <div className="absolute inset-0 bg-black/40" />
 
         <div className="relative z-10 flex h-full items-center justify-center px-6 text-center text-white">

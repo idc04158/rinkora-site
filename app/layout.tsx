@@ -9,9 +9,9 @@ export const metadata: Metadata = {
     '린코라는 지원사업 검색부터 AI 추천, 전문가 매칭, 해외진출까지 이어지는 기업 성장 기회 플랫폼입니다.',
   generator: 'v0.app',
   icons: {
-    icon: '/icon-light-32x32.png',
-    shortcut: '/icon-light-32x32.png',
-    apple: '/icon-light-32x32.png',
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
   },
 }
 

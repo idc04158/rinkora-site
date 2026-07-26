@@ -1,5 +1,7 @@
 "use client"
 
+import Link from "next/link"
+
 export function Footer() {
   return (
     <footer className="border-t bg-muted/30 px-6 py-16">
@@ -35,12 +37,12 @@ export function Footer() {
 
           {/* 기존 정책 링크 */}
           <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
-            <a href="#" className="hover:text-primary transition">
+            <Link href="/privacy" className="hover:text-primary transition">
               개인정보처리방침
-            </a>
-            <a href="#" className="hover:text-primary transition">
+            </Link>
+            <Link href="/terms" className="hover:text-primary transition">
               이용약관
-            </a>
+            </Link>
           </div>
 
           {/* 저작권 */}

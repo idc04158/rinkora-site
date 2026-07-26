@@ -175,11 +175,10 @@ export function ConsultModal({ service = "", onClose }: Props) {
 
             <div className="mt-6 space-y-3">
               <a
-                href="/ebook.pdf"
-                download
+                href="/resources"
                 className="block w-full rounded-lg border py-3 text-center"
               >
-                일본 3대 플랫폼 분석 가이드 받기
+                신청 가이드 확인하기
               </a>
 
               <a
