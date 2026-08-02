@@ -62,7 +62,7 @@ export default async function AdminAnalyticsPage() {
       <section className="mt-6">
         <h3 className="text-lg font-semibold mb-2">인기 화면 (최근 7일)</h3>
         <ul className="space-y-2">
-          {summary.topPaths.map((p) => (
+        {summary.topPaths.map((p: { path: string; count: number }) => (
             <li key={p.path} className="flex justify-between rounded-md border bg-background p-3">
               <span className="text-sm text-muted-foreground">{p.path}</span>
               <span className="font-medium">{p.count}</span>
@@ -112,7 +112,7 @@ export default async function AdminAnalyticsPage() {
       <section className="mt-6">
         <h3 className="text-lg font-semibold mb-2">사이트 내 검색어 (최근 7일)</h3>
         <ul className="space-y-2">
-          {summary.topSearches.map((s) => (
+          {summary.topSearches.map((s: { query: string; count: number }) => (
             <li key={s.query} className="flex justify-between rounded-md border bg-background p-3">
               <span className="text-sm text-muted-foreground">{s.query}</span>
               <span className="font-medium">{s.count}</span>
