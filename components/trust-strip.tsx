@@ -76,15 +76,15 @@ function LogoRow() {
   return (
     <div className="flex items-center gap-20 pr-20">
 
-      <img src="/logo1.png" className="h-10 object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
-      <img src="/logo2.png" className="h-10 object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
-      <img src="/logo3.png" className="h-10 object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
-      <img src="/logo4.jpg" className="h-10 object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
-      <img src="/logo5.jpg" className="h-10 object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
-      <img src="/logo6.png" className="h-10 object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
-      <img src="/logo7.png" className="h-10 object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
-      <img src="/logo8.png" className="h-10 object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
-      <img src="/logo9.png" className="h-10 object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
+      <img src="/logo1.png" alt="" className="h-10 object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
+      <img src="/logo2.png" alt="" className="h-10 object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
+      <img src="/logo3.png" alt="" className="h-10 object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
+      <img src="/logo4.jpg" alt="" className="h-10 object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
+      <img src="/logo5.jpg" alt="" className="h-10 object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
+      <img src="/logo6.png" alt="" className="h-10 object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
+      <img src="/logo7.png" alt="" className="h-10 object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
+      <img src="/logo8.png" alt="" className="h-10 object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
+      <img src="/logo9.png" alt="" className="h-10 object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition" />
 
     </div>
   )

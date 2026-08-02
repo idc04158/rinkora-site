@@ -32,10 +32,21 @@ export function OpportunityCard({
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-sm text-muted-foreground">{opportunity.organization}</p>
-          <p className="text-sm text-muted-foreground">{opportunity.summary}</p>
+          <p className="text-sm text-muted-foreground line-clamp-2">
+            {opportunity.enrichment?.shortSummary || opportunity.summary || "상세 요약을 확인해보세요."}
+          </p>
           <div className="flex flex-wrap gap-2">
-            <SupportAmountBadge supportAmount={opportunity.supportAmount} />
+            <SupportAmountBadge
+              supportAmount={
+                opportunity.enrichment?.budgetText || opportunity.supportAmount
+              }
+            />
             <Badge variant="secondary">{opportunity.region}</Badge>
+            {typeof opportunity.enrichment?.relevanceScore === "number" ? (
+              <Badge variant="outline">
+                관련도 {Math.round(opportunity.enrichment.relevanceScore)}
+              </Badge>
+            ) : null}
             {opportunity.tags.slice(0, 2).map((tag) => (
               <Badge key={tag} variant="outline">
                 #{tag}
