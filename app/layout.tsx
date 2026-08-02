@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from 'next'
 import { Analytics } from '@vercel/analytics/next'
 import { AuthProvider } from "@/components/auth/auth-provider"
+import AnalyticsTracker from "@/components/analytics/analytics-tracker"
+import GoogleAnalytics from "@/components/analytics/google-analytics"
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -30,6 +32,8 @@ export default function RootLayout({
       <body className="font-sans antialiased">
         <AuthProvider>
           {children}
+          <AnalyticsTracker />
+          <GoogleAnalytics />
           <Analytics />
         </AuthProvider>
       </body>

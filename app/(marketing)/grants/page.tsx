@@ -23,6 +23,25 @@ import {
   OpportunitySort,
 } from "@/types/opportunity"
 
+const categoryOptions: OpportunityCategory[] = [
+  "AI",
+  "RND",
+  "EXPORT",
+  "DATA",
+  "MANUFACTURING",
+  "MARKETING",
+]
+
+const regionOptions: OpportunityRegion[] = [
+  "전국",
+  "서울",
+  "경기",
+  "인천",
+  "부산",
+  "대구",
+  "대전",
+]
+
 export default function GrantsPage() {
   const { profile } = useAuthSession()
   const repository = useMemo(() => getOpportunityRepository(), [])
@@ -32,13 +51,6 @@ export default function GrantsPage() {
   const [regions, setRegions] = useState<OpportunityRegion[]>([])
   const [query, setQuery] = useState("")
 
-  useEffect(() => {
-    const keyword = new URLSearchParams(window.location.search).get("q") ?? ""
-    if (keyword) {
-      setQuery(keyword)
-    }
-  }, [])
-
   const [selectedCategory, setSelectedCategory] = useState<OpportunityCategory | "ALL">(
     "ALL",
   )
@@ -46,11 +58,52 @@ export default function GrantsPage() {
   const [selectedSort, setSelectedSort] = useState<OpportunitySort>("deadline_asc")
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [saveSearchName, setSaveSearchName] = useState("")
+  const [saveSearchMessage, setSaveSearchMessage] = useState("")
+  const [savingSearch, setSavingSearch] = useState(false)
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const keyword = params.get("q") ?? ""
+    const rawCategory = params.get("category")
+    const rawRegion = params.get("region")
+    const rawSort = params.get("sort")
+
+    if (keyword) setQuery(keyword)
+    if (rawCategory && categoryOptions.includes(rawCategory as OpportunityCategory)) {
+      setSelectedCategory(rawCategory as OpportunityCategory)
+    }
+    if (rawRegion && regionOptions.includes(rawRegion as OpportunityRegion)) {
+      setSelectedRegion(rawRegion as OpportunityRegion)
+    }
+    if (rawSort === "deadline_asc" || rawSort === "deadline_desc") {
+      setSelectedSort(rawSort)
+    }
+  }, [])
 
   const fetchOpportunities = useCallback(async () => {
     setLoading(true)
     setError(null)
     try {
+      // log site search for analytics (client-side)
+      try {
+        if (query && query.trim()) {
+          const visitorId = typeof window !== "undefined" ? localStorage.getItem("rk_visitor_id") ?? undefined : undefined
+          const sessionId = typeof window !== "undefined" ? sessionStorage.getItem("rk_session_id") ?? undefined : undefined
+          void fetch("/api/analytics/events", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              type: "site_search",
+              sessionId: sessionId ?? `s_${Date.now().toString(36)}`,
+              visitorId: visitorId ?? `v_${Date.now().toString(36)}`,
+              path: "/grants",
+              query: query,
+            }),
+          })
+        }
+      } catch {}
+
       const result = await repository.getOpportunities({
         query,
         category: selectedCategory,
@@ -88,10 +141,13 @@ export default function GrantsPage() {
       return
     }
 
-    void fetch("/api/programs/save", { cache: "no-store" })
+    void fetch("/api/favorites", { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
-        setSavedIds(Array.isArray(data?.programIds) ? data.programIds : [])
+        const ids = Array.isArray(data?.items)
+          ? data.items.map((item: { opportunityId: string }) => item.opportunityId)
+          : []
+        setSavedIds(ids)
       })
   }, [profile.role])
 
@@ -100,13 +156,11 @@ export default function GrantsPage() {
 
     const isSaved = savedIds.includes(opportunity.id)
     const method = isSaved ? "DELETE" : "POST"
-    const response = await fetch("/api/programs/save", {
+    const response = await fetch("/api/favorites", {
       method,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         opportunityId: opportunity.id,
-        title: opportunity.title,
-        category: opportunity.category,
       }),
     })
 
@@ -115,6 +169,41 @@ export default function GrantsPage() {
     setSavedIds((prev) =>
       isSaved ? prev.filter((id) => id !== opportunity.id) : [...prev, opportunity.id]
     )
+  }
+
+  const handleSaveCurrentSearch = async () => {
+    const trimmedName = saveSearchName.trim()
+    if (!trimmedName) {
+      setSaveSearchMessage("저장 검색 이름을 입력해주세요.")
+      return
+    }
+
+    setSavingSearch(true)
+    setSaveSearchMessage("")
+
+    try {
+      const response = await fetch("/api/saved-searches", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: trimmedName,
+          query: query || undefined,
+          category: selectedCategory === "ALL" ? undefined : selectedCategory,
+          region: selectedRegion === "ALL" ? undefined : selectedRegion,
+          sort: selectedSort,
+        }),
+      })
+      const payload = (await response.json().catch(() => null)) as { message?: string } | null
+      if (!response.ok) {
+        setSaveSearchMessage(payload?.message ?? "저장 검색 생성에 실패했습니다.")
+        return
+      }
+
+      setSaveSearchMessage("현재 검색 조건을 저장했습니다.")
+      setSaveSearchName("")
+    } finally {
+      setSavingSearch(false)
+    }
   }
 
   return (
@@ -134,13 +223,40 @@ export default function GrantsPage() {
             <SearchBar initialValue={query} onSearch={setQuery} />
           </div>
           {profile.role !== "guest" ? (
-            <div className="mt-4">
-              <Link
-                href="/grants/saved"
-                className="inline-flex rounded-lg border px-3 py-2 text-xs font-semibold hover:bg-muted"
-              >
-                내 저장목록 보기
-              </Link>
+            <div className="mt-4 space-y-3">
+              <div className="flex flex-wrap gap-2">
+                <Link
+                  href="/grants/saved"
+                  className="inline-flex rounded-lg border px-3 py-2 text-xs font-semibold hover:bg-muted"
+                >
+                  내 저장목록 보기
+                </Link>
+                <Link
+                  href="/me"
+                  className="inline-flex rounded-lg border px-3 py-2 text-xs font-semibold hover:bg-muted"
+                >
+                  내 페이지
+                </Link>
+              </div>
+              <div className="flex flex-col gap-2 sm:flex-row">
+                <input
+                  value={saveSearchName}
+                  onChange={(event) => setSaveSearchName(event.target.value)}
+                  placeholder="현재 검색 저장 이름"
+                  className="h-9 w-full rounded-lg border bg-background px-3 text-xs sm:max-w-xs"
+                />
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={handleSaveCurrentSearch}
+                  disabled={savingSearch}
+                >
+                  {savingSearch ? "저장 중..." : "현재 검색 저장"}
+                </Button>
+              </div>
+              {saveSearchMessage ? (
+                <p className="text-xs text-muted-foreground">{saveSearchMessage}</p>
+              ) : null}
             </div>
           ) : null}
           <div className="mt-4">
