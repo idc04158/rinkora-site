@@ -21,50 +21,53 @@ export function OpportunityCard({
   saveDisabledMessage,
 }: OpportunityCardProps) {
   return (
-    <Card className="h-full">
-      <CardHeader className="pb-2">
-        <div className="flex items-center justify-between gap-2">
-          <Badge variant="outline">{opportunity.category}</Badge>
-          <DeadlineBadge deadline={opportunity.deadline} />
-        </div>
-        <CardTitle className="text-lg leading-snug">{opportunity.title}</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <p className="text-sm text-muted-foreground">{opportunity.organization}</p>
-        <p className="text-sm text-muted-foreground">{opportunity.summary}</p>
-        <div className="flex flex-wrap gap-2">
-          <SupportAmountBadge supportAmount={opportunity.supportAmount} />
-          <Badge variant="secondary">{opportunity.region}</Badge>
-          {opportunity.tags.slice(0, 2).map((tag) => (
-            <Badge key={tag} variant="outline">
-              #{tag}
-            </Badge>
-          ))}
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <Link
-            href={`/grants/${opportunity.id}`}
-            className="inline-flex text-sm font-semibold text-primary hover:underline"
-          >
-            상세 보기
-          </Link>
-          {onToggleSave ? (
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => onToggleSave(opportunity)}
-              className="h-8"
-            >
-              <Bookmark className="h-3.5 w-3.5" />
-              {isSaved ? "저장 해제" : "저장"}
-            </Button>
+    <Link href={`/grants/${opportunity.id}`} className="block">
+      <Card className="h-full hover:shadow-lg focus-within:shadow-lg">
+        <CardHeader className="pb-2">
+          <div className="flex items-center justify-between gap-2">
+            <Badge variant="outline">{opportunity.category}</Badge>
+            <DeadlineBadge deadline={opportunity.deadline} />
+          </div>
+          <CardTitle className="text-lg leading-snug">{opportunity.title}</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-sm text-muted-foreground">{opportunity.organization}</p>
+          <p className="text-sm text-muted-foreground">{opportunity.summary}</p>
+          <div className="flex flex-wrap gap-2">
+            <SupportAmountBadge supportAmount={opportunity.supportAmount} />
+            <Badge variant="secondary">{opportunity.region}</Badge>
+            {opportunity.tags.slice(0, 2).map((tag) => (
+              <Badge key={tag} variant="outline">
+                #{tag}
+              </Badge>
+            ))}
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex text-sm font-semibold text-primary opacity-90">
+              상세 보기
+            </span>
+            {onToggleSave ? (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  onToggleSave(opportunity)
+                }}
+                className="h-8"
+              >
+                <Bookmark className="h-3.5 w-3.5" />
+                {isSaved ? "저장 해제" : "저장"}
+              </Button>
+            ) : null}
+          </div>
+          {saveDisabledMessage ? (
+            <p className="text-xs text-muted-foreground">{saveDisabledMessage}</p>
           ) : null}
-        </div>
-        {saveDisabledMessage ? (
-          <p className="text-xs text-muted-foreground">{saveDisabledMessage}</p>
-        ) : null}
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </Link>
   )
 }
