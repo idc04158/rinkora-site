@@ -109,10 +109,31 @@ function toAttachment(item: unknown): OpportunityAttachment | null {
   }
 }
 
+function isMeaninglessValue(value: unknown): boolean {
+  if (value == null) return true
+  if (typeof value === "string") {
+    const trimmed = value.trim().toLowerCase()
+    return trimmed === "" || trimmed === "other" || trimmed === "unknown" || trimmed === "n/a"
+  }
+  if (typeof value === "boolean" || typeof value === "number") return false
+  if (Array.isArray(value)) {
+    return value.length === 0 || value.every((item) => isMeaninglessValue(item))
+  }
+  if (typeof value === "object") {
+    const entries = Object.entries(value as Record<string, unknown>).filter(
+      ([key]) => key !== "extractMethod" && key !== "rawEligibility",
+    )
+    return entries.length === 0 || entries.every(([, entry]) => isMeaninglessValue(entry))
+  }
+  return true
+}
+
 function toTextOrRecord(value: unknown): string | Record<string, unknown> | undefined {
   if (typeof value === "string" && value.trim()) return value
   if (value && typeof value === "object" && !Array.isArray(value)) {
-    return value as Record<string, unknown>
+    const record = value as Record<string, unknown>
+    if (isMeaninglessValue(record)) return undefined
+    return record
   }
   return undefined
 }

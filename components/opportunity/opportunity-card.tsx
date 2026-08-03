@@ -33,7 +33,11 @@ export function OpportunityCard({
         <CardContent className="space-y-4">
           <p className="text-sm text-muted-foreground">{opportunity.organization}</p>
           <p className="text-sm text-muted-foreground line-clamp-2">
-            {opportunity.enrichment?.shortSummary || opportunity.summary || "상세 요약을 확인해보세요."}
+            {opportunity.enrichment?.shortSummary?.trim() ||
+              opportunity.summary?.trim() ||
+              (opportunity.organization
+                ? `${opportunity.organization} 공고 · 상세에서 확인`
+                : "상세에서 공고 내용을 확인해보세요.")}
           </p>
           <div className="flex flex-wrap gap-2">
             <SupportAmountBadge

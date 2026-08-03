@@ -51,14 +51,25 @@ export default function GrantDetailPage() {
   }, [id, repository])
 
   useEffect(() => {
+    if (!opportunity) return
+    void fetch("/api/view-history", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ opportunityId: opportunity.id }),
+    }).catch(() => null)
+  }, [opportunity])
+
+  useEffect(() => {
     if (profile.role === "guest" || !id) {
       setSaved(false)
       return
     }
-    void fetch("/api/programs/save", { cache: "no-store" })
+    void fetch("/api/favorites", { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
-        const ids = Array.isArray(data?.programIds) ? data.programIds : []
+        const ids = Array.isArray(data?.items)
+          ? data.items.map((item: { opportunityId: string }) => item.opportunityId)
+          : []
         setSaved(ids.includes(id))
       })
   }, [id, profile.role])
@@ -66,13 +77,11 @@ export default function GrantDetailPage() {
   const handleToggleSave = async (target: OpportunityDto) => {
     if (profile.role === "guest") return
     const method = saved ? "DELETE" : "POST"
-    const response = await fetch("/api/programs/save", {
+    const response = await fetch("/api/favorites", {
       method,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         opportunityId: target.id,
-        title: target.title,
-        category: target.category,
       }),
     })
     if (!response.ok) return
