@@ -1,7 +1,8 @@
-import { cookies } from "next/headers"
+import { cookies, headers } from "next/headers"
 import { NextRequest } from "next/server"
 import { redirect } from "next/navigation"
 import type { SessionUser } from "@/types/auth"
+import { getAdminCredentials, isValidAdminBasicAuth } from "@/lib/auth/admin-basic"
 import { verifySessionToken } from "@/lib/auth/jwt"
 
 export const SESSION_COOKIE_NAME = "rinkora_session"
@@ -53,8 +54,19 @@ export async function getSessionUser(): Promise<SessionUser | null> {
 
 export async function requireAdminPage() {
   const user = await getSessionUser()
-  if (!user || user.role !== "admin") {
-    redirect("/auth/login")
+  if (user?.role === "admin") return user
+
+  // Prefer Basic Auth against Vercel env (ADMIN_ID or ADMIN_EMAIL + ADMIN_PASSWORD).
+  const headerStore = await headers()
+  if (isValidAdminBasicAuth(headerStore.get("authorization"))) {
+    const { id } = getAdminCredentials()
+    return {
+      id: "env-admin",
+      email: id,
+      role: "admin" as const,
+      status: "active" as const,
+    }
   }
-  return user
+
+  redirect("/auth/login")
 }
